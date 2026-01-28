@@ -377,6 +377,17 @@
             transform: translateY(-3px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
+
+        .custom-error {
+            color: var(--error-color);
+            font-size: 0.875rem;
+            margin-top: 0.375rem;
+            display: none;
+        }
+
+        .input-error {
+            border-color: var(--error-color) !important;
+        }
     </style>
 </head>
 <body>
@@ -447,7 +458,7 @@
                 </div>
 
                 <!-- Form -->
-                <form id="refundForm">
+                <form id="refundForm" novalidate>
                 <!-- Korean Form -->
                 <div class="form-section" id="form-ko">
                     <div class="form-group">
@@ -779,8 +790,12 @@
             
             if (fileInput) {
                 fileInput.addEventListener('change', function(e) {
-                    // Clear custom validity
-                    this.setCustomValidity('');
+                    // Clear error state
+                    this.classList.remove('input-error');
+                    const errorDiv = this.parentElement.querySelector('.custom-error');
+                    if (errorDiv) {
+                        errorDiv.style.display = 'none';
+                    }
                     
                     if (e.target.files.length > 0) {
                         const file = e.target.files[0];
@@ -799,11 +814,15 @@
             }
         });
 
-        // Clear custom validity on input
-        document.querySelectorAll('input[required], select[required], textarea[required]').forEach(input => {
-            input.addEventListener('input', function() {
-                this.setCustomValidity('');
-            });
+        // Clear error state on input
+        document.addEventListener('input', function(e) {
+            if (e.target.matches('input, select, textarea')) {
+                e.target.classList.remove('input-error');
+                const errorDiv = e.target.parentElement.querySelector('.custom-error');
+                if (errorDiv) {
+                    errorDiv.style.display = 'none';
+                }
+            }
         });
 
         // Drag and drop handling
@@ -864,10 +883,17 @@
                 return;
             }
 
+            // Clear all previous errors
+            document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+            document.querySelectorAll('.custom-error').forEach(el => {
+                el.style.display = 'none';
+                el.textContent = '';
+            });
+
             // Custom validation with language-specific messages
             const activeForm = document.getElementById('form-' + currentLanguage);
             const requiredInputs = activeForm.querySelectorAll('[required]');
-            let isValid = true;
+            let firstError = null;
             
             const validationMessages = {
                 ko: {
@@ -885,24 +911,42 @@
             };
             
             requiredInputs.forEach(input => {
+                let isInvalid = false;
+                let errorMsg = '';
+                
                 if (input.type === 'file') {
                     if (input.files.length === 0) {
-                        input.setCustomValidity(validationMessages[currentLanguage].file);
-                        isValid = false;
-                    } else {
-                        input.setCustomValidity('');
+                        isInvalid = true;
+                        errorMsg = validationMessages[currentLanguage].file;
                     }
                 } else if (!input.value.trim()) {
-                    input.setCustomValidity(validationMessages[currentLanguage].required);
-                    isValid = false;
-                } else {
-                    input.setCustomValidity('');
+                    isInvalid = true;
+                    errorMsg = validationMessages[currentLanguage].required;
+                }
+                
+                if (isInvalid) {
+                    input.classList.add('input-error');
+                    
+                    // Create or show error message
+                    let errorDiv = input.parentElement.querySelector('.custom-error');
+                    if (!errorDiv) {
+                        errorDiv = document.createElement('div');
+                        errorDiv.className = 'custom-error';
+                        input.parentElement.appendChild(errorDiv);
+                    }
+                    errorDiv.textContent = errorMsg;
+                    errorDiv.style.display = 'block';
+                    
+                    if (!firstError) {
+                        firstError = input;
+                    }
                 }
             });
             
-            if (!isValid) {
-                // Trigger browser validation UI
-                this.reportValidity();
+            if (firstError) {
+                // Scroll to first error
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstError.focus();
                 return;
             }
 
