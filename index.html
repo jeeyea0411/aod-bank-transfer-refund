@@ -989,22 +989,55 @@
 
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwaUqnhsK5TI2otZ3N9ytbsYiKpyo3z77LgU9ZJEdafTDx7q_XG-TsUIhE5aXDqcBBUhg/exec';
 
-            fetch(scriptURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formDataObj)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Response:', data);
-                
-                // Check if response indicates error
-                if (data.status === 'error') {
-                    throw new Error(data.message || 'Unknown error');
+            // Create hidden iframe for submission (to avoid CORS issues)
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.name = 'hidden_iframe';
+            document.body.appendChild(iframe);
+            
+            // Create temporary form for submission
+            const tempForm = document.createElement('form');
+            tempForm.method = 'POST';
+            tempForm.action = scriptURL;
+            tempForm.target = 'hidden_iframe';
+            
+            // Add all data as hidden inputs
+            for (const key in formDataObj) {
+                if (key === 'fileData') {
+                    // Add file data as separate fields
+                    const fileInput1 = document.createElement('input');
+                    fileInput1.type = 'hidden';
+                    fileInput1.name = 'fileName';
+                    fileInput1.value = formDataObj.fileData.name;
+                    tempForm.appendChild(fileInput1);
+                    
+                    const fileInput2 = document.createElement('input');
+                    fileInput2.type = 'hidden';
+                    fileInput2.name = 'fileType';
+                    fileInput2.value = formDataObj.fileData.type;
+                    tempForm.appendChild(fileInput2);
+                    
+                    const fileInput3 = document.createElement('input');
+                    fileInput3.type = 'hidden';
+                    fileInput3.name = 'fileData';
+                    fileInput3.value = formDataObj.fileData.data;
+                    tempForm.appendChild(fileInput3);
+                } else {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = formDataObj[key];
+                    tempForm.appendChild(input);
                 }
-                
+            }
+            
+            document.body.appendChild(tempForm);
+            
+            // Submit form
+            tempForm.submit();
+            
+            // Wait a bit then show success (since we can't get response with iframe)
+            setTimeout(() => {
                 // Hide loading
                 document.getElementById('loadingDiv').style.display = 'none';
                 document.getElementById('submitBtn').disabled = false;
@@ -1024,24 +1057,18 @@
                 successMsg.style.display = 'block';
 
                 // Reset form
-                this.reset();
+                document.getElementById('refundForm').reset();
                 document.querySelectorAll('.file-name').forEach(el => {
                     el.style.display = 'none';
                 });
 
+                // Clean up
+                document.body.removeChild(tempForm);
+                document.body.removeChild(iframe);
+
                 // Scroll to success message
                 successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('loadingDiv').style.display = 'none';
-                document.getElementById('submitBtn').disabled = false;
-                
-                const errorMsg = currentLanguage === 'ko' ? '제출 중 오류가 발생했습니다. 다시 시도해 주세요.\n' + error.toString() :
-                                currentLanguage === 'ja' ? '送信中にエラーが発生しました。もう一度お試しください。\n' + error.toString() :
-                                'An error occurred during submission. Please try again.\n' + error.toString();
-                alert(errorMsg);
-            });
+            }, 2000);
         });
 
         // Helper function to convert file to base64
