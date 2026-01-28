@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AOD Service Refund Request | AOD 서비스 환불 신청</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #3f3f46;
+            --primary-hover: #27272a;
+            --error-color: #dc2626;
+            --success-color: #16a34a;
+            --border-color: #e4e4e7;
+            --text-primary: #18181b;
+            --text-secondary: #71717a;
+            --bg-gray: #fafafa;
+            --header-bg: #27272a;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans JP', 'Inter', 'Segoe UI', sans-serif;
+            background: #f4f4f5;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Language-specific font optimization */
+        body[lang="ko"],
+        body[lang="ko"] * {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+        }
+
+        body[lang="ja"],
+        body[lang="ja"] * {
+            font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', sans-serif;
+            letter-spacing: 0.03em;
+        }
+
+        body[lang="en"],
+        body[lang="en"] * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+        }
+
+        .header {
+            background: var(--header-bg);
+            color: white;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid #52525b;
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+        }
+
+        .header p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .notice-box {
+            background: #fafaf9;
+            border-left: 3px solid #52525b;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 6px;
+        }
+
+        .notice-box h3 {
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .notice-box p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .notice-box ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .notice-box li {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            margin-bottom: 0.25rem;
+        }
+
+        .language-selector {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .lang-btn {
+            padding: 0.625rem 1.75rem;
+            border: 1.5px solid var(--border-color);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            color: var(--text-primary);
+        }
+
+        .lang-btn:hover {
+            border-color: var(--primary-color);
+            background: var(--bg-gray);
+        }
+
+        .lang-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .form-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .required {
+            color: var(--error-color);
+            margin-left: 0.25rem;
+        }
+
+        .help-text {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.625rem 0.75rem;
+            border: 1.5px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: var(--bg-gray);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .file-upload-area {
+            border: 1.5px dashed var(--border-color);
+            border-radius: 6px;
+            padding: 1.75rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--bg-gray);
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--primary-color);
+            background: #fafafa;
+        }
+
+        .file-upload-area.dragover {
+            border-color: var(--primary-color);
+            background: #fafafa;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-name {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 0.875rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 2rem;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .submit-btn:disabled {
+            background: #a1a1aa;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .success-message {
+            background: #f0fdf4;
+            border: 1.5px solid var(--success-color);
+            color: #166534;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 640px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .content {
+                padding: 1.5rem;
+            }
+            
+            .lang-btn {
+                padding: 0.6rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        .optional {
+            color: var(--text-secondary);
+            font-weight: 400;
+            font-size: 0.875rem;
+            margin-left: 0.25rem;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 0.5rem 0;
+            margin-bottom: 1.5rem;
+            transition: color 0.2s ease;
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            color: var(--primary-color);
+        }
+
+        #languageSelectionScreen {
+            padding: 3rem 0;
+        }
+
+        #languageSelectionScreen .language-selector {
+            margin-bottom: 0;
+        }
+
+        #languageSelectionScreen .lang-btn {
+            background: var(--header-bg);
+            color: white;
+            border-color: var(--header-bg);
+        }
+
+        #languageSelectionScreen .lang-btn:hover {
+            background: var(--primary-hover);
+            border-color: var(--primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 id="header-title">AOD Service Refund Request</h1>
+            <p id="header-subtitle">Please select your language</p>
+        </div>
+
+        <div class="content">
+            <!-- Initial Language Selection Screen -->
+            <div id="languageSelectionScreen">
+                <div class="language-selector">
+                    <button class="lang-btn" onclick="selectLanguage('en')">English</button>
+                    <button class="lang-btn" onclick="selectLanguage('ko')">한국어 (Korean)</button>
+                    <button class="lang-btn" onclick="selectLanguage('ja')">日本語 (Japanese)</button>
+                </div>
+            </div>
+
+            <!-- Form Content (hidden initially) -->
+            <div id="formContent" style="display: none;">
+                <!-- Back Button -->
+                <button class="back-btn" onclick="goBackToLanguageSelection()">
+                    <span id="back-text">← Back to Language Selection</span>
+                </button>
+
+                <!-- Notice Box -->
+                <div class="notice-box">
+                    <h3 id="notice-title">Privacy Notice</h3>
+                    <div id="notice-content-ko" style="display: none;">
+                        <p>본 양식을 통해 수집되는 개인정보는 AOD 서비스 종료에 따른 환불 처리 목적으로만 사용됩니다.</p>
+                        <ul>
+                            <li>수집 항목: 성명, 게임 닉네임, 계좌정보, 계좌 증빙서류</li>
+                            <li>이용 목적: 환불금 송금 처리</li>
+                            <li>보유 기간: 환불 완료 후 90일 (법령에 따라 필요시 연장 가능)</li>
+                            <li>귀하는 개인정보 제공을 거부할 권리가 있으나, 이 경우 환불 처리가 불가능합니다.</li>
+                        </ul>
+                    </div>
+                    <div id="notice-content-ja" style="display: none;">
+                        <p>この申請フォームを通じて収集される個人情報は、AODサービス終了に伴う返金処理の目的でのみ使用されます。</p>
+                        <ul>
+                            <li>収集項目：氏名、ゲームニックネーム、口座情報、口座証明書類</li>
+                            <li>利用目的：返金送金処理</li>
+                            <li>保有期間：返金完了後90日（法令により必要な場合は延長可能）</li>
+                            <li>個人情報の提供を拒否する権利がありますが、その場合返金処理ができません。</li>
+                        </ul>
+                    </div>
+                    <div id="notice-content-en" style="display: none;">
+                        <p>Personal information collected through this form will be used solely for processing refunds due to AOD service termination.</p>
+                        <ul>
+                            <li>Information collected: Name, game nickname, account information, account verification documents</li>
+                            <li>Purpose: Processing refund transfers</li>
+                            <li>Retention period: 90 days after refund completion (may be extended if required by law)</li>
+                            <li>You have the right to refuse to provide personal information, but refunds cannot be processed in such cases.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage">
+                    <p id="success-text"></p>
+                </div>
+
+                <!-- Loading -->
+                <div class="loading" id="loadingDiv">
+                    <div class="spinner"></div>
+                    <p id="loading-text">Processing...</p>
+                </div>
+
+                <!-- Form -->
+                <form id="refundForm">
+                <!-- Korean Form -->
+                <div class="form-section" id="form-ko">
+                    <div class="form-group">
+                        <label>대표 캐릭터 닉네임 <span class="required">*</span></label>
+                        <input type="text" name="nickname_ko" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>신청자 성함 <span class="required">*</span></label>
+                        <input type="text" name="name_ko" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>은행명 <span class="required">*</span></label>
+                        <input type="text" name="bank_name_ko" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>SWIFT CODE <span class="required">*</span></label>
+                        <input type="text" name="swift_code_ko" required>
+                        <div class="help-text">예시: CZNBKRSEXXX</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>은행 주소 <span class="required">*</span></label>
+                        <input type="text" name="bank_address_ko" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>계좌 번호 <span class="required">*</span></label>
+                        <input type="text" name="account_number_ko" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>계좌주명 <span class="required">*</span></label>
+                        <input type="text" name="account_holder_ko" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>은행 전화번호 <span class="required">*</span></label>
+                        <input type="text" name="bank_phone_ko" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>계좌 증빙 서류 업로드 <span class="required">*</span></label>
+                        <div class="help-text" style="margin-bottom: 0.75rem;">
+                            • 은행에서 직접 발행한 날인된 공식 서류<br>
+                            • 은행정보, 계좌정보 등이 명확히 기재된 공식 서류<br>
+                            • 은행 직인(날인) 필수<br>
+                            • 허용 형식: PDF, JPG, PNG (최대 10MB)
+                        </div>
+                        <div class="file-upload-area" onclick="document.getElementById('file_ko').click()">
+                            <div class="file-icon">📄</div>
+                            <p>클릭하여 파일 선택 또는 드래그 앤 드롭</p>
+                            <div class="file-name" id="fileName_ko" style="display: none;"></div>
+                        </div>
+                        <input type="file" id="file_ko" name="document_ko" accept=".pdf,.jpg,.jpeg,.png" required>
+                    </div>
+                </div>
+
+                <!-- Japanese Form -->
+                <div class="form-section" id="form-ja">
+                    <div class="form-group">
+                        <label>メインキャラクターニックネーム <span class="required">*</span></label>
+                        <input type="text" name="nickname_ja" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>金融機関の種類 <span class="required">*</span></label>
+                        <select name="institution_type_ja" required>
+                            <option value="">選択してください</option>
+                            <option value="銀行">銀行</option>
+                            <option value="信用金庫">信用金庫</option>
+                            <option value="信用組合">信用組合</option>
+                            <option value="労働金庫">労働金庫（ろうきん）</option>
+                            <option value="ゆうちょ銀行">ゆうちょ銀行</option>
+                            <option value="JA銀行">JAバンク（農協）</option>
+                            <option value="ネット銀行">インターネット銀行</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>金融機関名 <span class="required">*</span></label>
+                        <input type="text" name="bank_name_ja" required>
+                        <div class="help-text">例：三井住友銀行、楽天銀行など</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>金融機関コード <span class="required">*</span></label>
+                        <input type="text" name="bank_code_ja" pattern="[0-9]{4}" required>
+                        <div class="help-text">例：0001（4桁の半角数字）</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>支店名 <span class="required">*</span></label>
+                        <input type="text" name="branch_name_ja" required>
+                        <div class="help-text">例：渋谷支店</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>支店住所 <span class="required">*</span></label>
+                        <input type="text" name="branch_address_ja" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>支店コード <span class="required">*</span></label>
+                        <input type="text" name="branch_code_ja" pattern="[0-9]{3}" required>
+                        <div class="help-text">例：001（3桁の半角数字）</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>口座種類 <span class="required">*</span></label>
+                        <select name="account_type_ja" required>
+                            <option value="">選択してください</option>
+                            <option value="普通">普通預金</option>
+                            <option value="当座">当座預金</option>
+                            <option value="貯蓄">貯蓄預金</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>口座番号 <span class="required">*</span></label>
+                        <input type="text" name="account_number_ja" pattern="[0-9]{7}" required>
+                        <div class="help-text">例：1234567（7桁の半角数字）</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>口座名義 <span class="required">*</span></label>
+                        <input type="text" name="account_holder_ja" required>
+                        <div class="help-text">銀行口座の通帳、キャッシュカード等を基に<strong>全角カタカナ</strong>で正確に記入<br>例：ヤマダ　タロウ<br>※口座名義とご本人名が異なる場合、送金ができない場合があります。</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>SWIFTコード <span class="required">*</span></label>
+                        <input type="text" name="swift_code_ja" required>
+                        <div class="help-text">SWIFTコード（BICコード）は海外送金時に必要な銀行の国際識別番号です。<br>銀行ホームページや「○○銀行 SWIFTコード」等で検索してご確認ください。</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>総合口座通帳のコピーまたは証明書 <span class="required">*</span></label>
+                        <div class="help-text" style="margin-bottom: 0.75rem;">
+                            • 銀行名（例：三菱東京UFJ銀行）、支店名、口座番号、預金者名を含む<br>
+                            • 銀行直印が押印されていること<br>
+                            • 対応形式：PDF、JPG、PNG（最大10MB）
+                        </div>
+                        <div class="file-upload-area" onclick="document.getElementById('file_ja').click()">
+                            <div class="file-icon">📄</div>
+                            <p>クリックしてファイルを選択、またはドラッグ＆ドロップ</p>
+                            <div class="file-name" id="fileName_ja" style="display: none;"></div>
+                        </div>
+                        <input type="file" id="file_ja" name="document_ja" accept=".pdf,.jpg,.jpeg,.png" required>
+                    </div>
+                </div>
+
+                <!-- English Form -->
+                <div class="form-section" id="form-en">
+                    <div class="form-group">
+                        <label>Main Character Nickname <span class="required">*</span></label>
+                        <input type="text" name="nickname_en" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Applicant Name <span class="required">*</span></label>
+                        <input type="text" name="name_en" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Account Holder Name <span class="required">*</span></label>
+                        <input type="text" name="account_holder_en" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Bank Name <span class="required">*</span></label>
+                        <input type="text" name="bank_name_en" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>SWIFT CODE <span class="required">*</span></label>
+                        <input type="text" name="swift_code_en" required>
+                        <div class="help-text">Example: CHASUS33</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Bank Address <span class="required">*</span></label>
+                        <input type="text" name="bank_address_en" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Account Number <span class="required">*</span></label>
+                        <input type="text" name="account_number_en" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Bank Phone Number <span class="required">*</span></label>
+                        <input type="text" name="bank_phone_en" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>IBAN <span class="optional">(Optional - Required for Europe)</span></label>
+                        <input type="text" name="iban_en">
+                        <div class="help-text">International Bank Account Number (Required for European banks)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Proof of Account Details <span class="required">*</span></label>
+                        <div class="help-text" style="margin-bottom: 0.75rem;">
+                            • Official document issued directly by the bank with official stamp<br>
+                            • Must clearly show bank information and account details<br>
+                            • Bank's official seal/stamp is required<br>
+                            • Accepted formats: PDF, JPG, PNG (Max 10MB)
+                        </div>
+                        <div class="file-upload-area" onclick="document.getElementById('file_en').click()">
+                            <div class="file-icon">📄</div>
+                            <p>Click to select file or drag and drop</p>
+                            <div class="file-name" id="fileName_en" style="display: none;"></div>
+                        </div>
+                        <input type="file" id="file_en" name="document_en" accept=".pdf,.jpg,.jpeg,.png" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span id="submit-text">Submit</span>
+                </button>
+            </form>
+            </div> <!-- End of formContent -->
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = null;
+
+        // Do not auto-detect language on page load - show selection screen instead
+
+        function selectLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Set body lang attribute for font optimization
+            document.body.setAttribute('lang', lang);
+            
+            // Hide language selection screen
+            document.getElementById('languageSelectionScreen').style.display = 'none';
+            
+            // Show form content
+            document.getElementById('formContent').style.display = 'block';
+
+            // Hide all forms
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected form
+            document.getElementById('form-' + lang).classList.add('active');
+
+            // Update texts based on language
+            updateTexts(lang);
+
+            // Show/hide notice content
+            document.querySelectorAll('[id^="notice-content-"]').forEach(el => {
+                el.style.display = 'none';
+            });
+            document.getElementById('notice-content-' + lang).style.display = 'block';
+        }
+
+        function goBackToLanguageSelection() {
+            // Remove body lang attribute
+            document.body.removeAttribute('lang');
+            
+            // Show language selection screen
+            document.getElementById('languageSelectionScreen').style.display = 'block';
+            
+            // Hide form content
+            document.getElementById('formContent').style.display = 'none';
+            
+            // Reset form
+            document.getElementById('refundForm').reset();
+            document.querySelectorAll('.file-name').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Hide success message if shown
+            document.getElementById('successMessage').style.display = 'none';
+            
+            currentLanguage = null;
+        }
+
+        function updateTexts(lang) {
+            const texts = {
+                ko: {
+                    title: 'AOD 서비스 환불 신청',
+                    subtitle: 'App Store 결제 유저 대상 계좌 환불',
+                    submit: '제출하기',
+                    loading: '처리 중...',
+                    success: '환불 신청이 성공적으로 제출되었습니다.',
+                    noticeTitle: '개인정보 수집 및 이용 안내',
+                    back: '← 언어 선택으로 돌아가기'
+                },
+                ja: {
+                    title: 'AODサービス返金申請',
+                    subtitle: 'App Store決済ユーザー向け口座返金',
+                    submit: '送信する',
+                    loading: '処理中...',
+                    success: '返金申請が正常に送信されました。',
+                    noticeTitle: '個人情報の収集・利用に関するご案内',
+                    back: '← 言語選択に戻る'
+                },
+                en: {
+                    title: 'AOD Service Refund Request',
+                    subtitle: 'Account Refund for App Store Payment Users',
+                    submit: 'Submit',
+                    loading: 'Processing...',
+                    success: 'Your refund request has been successfully submitted.',
+                    noticeTitle: 'Privacy Notice',
+                    back: '← Back to Language Selection'
+                }
+            };
+
+            document.getElementById('header-title').textContent = texts[lang].title;
+            document.getElementById('header-subtitle').textContent = texts[lang].subtitle;
+            document.getElementById('submit-text').textContent = texts[lang].submit;
+            document.getElementById('loading-text').textContent = texts[lang].loading;
+            document.getElementById('notice-title').textContent = texts[lang].noticeTitle;
+            document.getElementById('back-text').textContent = texts[lang].back;
+        }
+
+        // File upload handling
+        ['ko', 'ja', 'en'].forEach(lang => {
+            const fileInput = document.getElementById('file_' + lang);
+            const fileName = document.getElementById('fileName_' + lang);
+            
+            if (fileInput) {
+                fileInput.addEventListener('change', function(e) {
+                    if (e.target.files.length > 0) {
+                        const file = e.target.files[0];
+                        // Check file size (10MB limit)
+                        if (file.size > 10 * 1024 * 1024) {
+                            alert(currentLanguage === 'ko' ? '파일 크기는 10MB를 초과할 수 없습니다.' :
+                                  currentLanguage === 'ja' ? 'ファイルサイズは10MBを超えることはできません。' :
+                                  'File size cannot exceed 10MB.');
+                            e.target.value = '';
+                            return;
+                        }
+                        fileName.textContent = file.name;
+                        fileName.style.display = 'block';
+                    }
+                });
+            }
+        });
+
+        // Drag and drop handling
+        document.querySelectorAll('.file-upload-area').forEach(area => {
+            area.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('dragover');
+            });
+
+            area.addEventListener('dragleave', function() {
+                this.classList.remove('dragover');
+            });
+
+            area.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                
+                const lang = this.parentElement.querySelector('input[type="file"]').id.split('_')[1];
+                const fileInput = document.getElementById('file_' + lang);
+                const fileName = document.getElementById('fileName_' + lang);
+                
+                if (e.dataTransfer.files.length > 0) {
+                    const file = e.dataTransfer.files[0];
+                    
+                    // Check file size (10MB limit)
+                    if (file.size > 10 * 1024 * 1024) {
+                        alert(currentLanguage === 'ko' ? '파일 크기는 10MB를 초과할 수 없습니다.' :
+                              currentLanguage === 'ja' ? 'ファイルサイズは10MBを超えることはできません。' :
+                              'File size cannot exceed 10MB.');
+                        return;
+                    }
+                    
+                    // Check file type
+                    const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+                    if (!allowedTypes.includes(file.type)) {
+                        alert(currentLanguage === 'ko' ? 'PDF, JPG, PNG 파일만 업로드 가능합니다.' :
+                              currentLanguage === 'ja' ? 'PDF、JPG、PNGファイルのみアップロード可能です。' :
+                              'Only PDF, JPG, and PNG files are allowed.');
+                        return;
+                    }
+                    
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    fileInput.files = dataTransfer.files;
+                    
+                    fileName.textContent = file.name;
+                    fileName.style.display = 'block';
+                }
+            });
+        });
+
+        // Form submission
+        document.getElementById('refundForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!currentLanguage) {
+                alert('Please select a language first.');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loadingDiv').style.display = 'block';
+            document.getElementById('submitBtn').disabled = true;
+
+            // Prepare form data
+            const formData = new FormData();
+            formData.append('language', currentLanguage);
+            formData.append('timestamp', new Date().toISOString());
+
+            // Get all inputs from the active form
+            const activeForm = document.getElementById('form-' + currentLanguage);
+            const inputs = activeForm.querySelectorAll('input, select, textarea');
+            
+            inputs.forEach(input => {
+                if (input.type === 'file') {
+                    if (input.files.length > 0) {
+                        formData.append(input.name, input.files[0]);
+                    }
+                } else {
+                    formData.append(input.name, input.value);
+                }
+            });
+
+            // TODO: Replace with your actual Google Apps Script Web App URL
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwaUqnhsK5TI2otZ3N9ytbsYiKpyo3z77LgU9ZJEdafTDx7q_XG-TsUIhE5aXDqcBBUhg/exec';
+
+            fetch(scriptURL, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hide loading
+                document.getElementById('loadingDiv').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+
+                // Show success message
+                const successMsg = document.getElementById('successMessage');
+                const successText = document.getElementById('success-text');
+                
+                if (currentLanguage === 'ko') {
+                    successText.textContent = '환불 신청이 성공적으로 제출되었습니다. 검토 후 연락드리겠습니다.';
+                } else if (currentLanguage === 'ja') {
+                    successText.textContent = '返金申請が正常に送信されました。確認後、ご連絡いたします。';
+                } else {
+                    successText.textContent = 'Your refund request has been successfully submitted. We will contact you after review.';
+                }
+                
+                successMsg.style.display = 'block';
+
+                // Reset form
+                this.reset();
+                document.querySelectorAll('.file-name').forEach(el => {
+                    el.style.display = 'none';
+                });
+
+                // Scroll to success message
+                successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('loadingDiv').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+                
+                const errorMsg = currentLanguage === 'ko' ? '제출 중 오류가 발생했습니다. 다시 시도해 주세요.' :
+                                currentLanguage === 'ja' ? '送信中にエラーが発生しました。もう一度お試しください。' :
+                                'An error occurred during submission. Please try again.';
+                alert(errorMsg);
+            });
+        });
+    </script>
+</body>
+</html>
