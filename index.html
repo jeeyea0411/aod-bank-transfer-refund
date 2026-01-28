@@ -779,6 +779,9 @@
             
             if (fileInput) {
                 fileInput.addEventListener('change', function(e) {
+                    // Clear custom validity
+                    this.setCustomValidity('');
+                    
                     if (e.target.files.length > 0) {
                         const file = e.target.files[0];
                         // Check file size (10MB limit)
@@ -794,6 +797,13 @@
                     }
                 });
             }
+        });
+
+        // Clear custom validity on input
+        document.querySelectorAll('input[required], select[required], textarea[required]').forEach(input => {
+            input.addEventListener('input', function() {
+                this.setCustomValidity('');
+            });
         });
 
         // Drag and drop handling
@@ -854,6 +864,48 @@
                 return;
             }
 
+            // Custom validation with language-specific messages
+            const activeForm = document.getElementById('form-' + currentLanguage);
+            const requiredInputs = activeForm.querySelectorAll('[required]');
+            let isValid = true;
+            
+            const validationMessages = {
+                ko: {
+                    required: '이 항목을 입력해주세요.',
+                    file: '파일을 업로드해주세요.'
+                },
+                ja: {
+                    required: 'この項目を入力してください。',
+                    file: 'ファイルをアップロードしてください。'
+                },
+                en: {
+                    required: 'Please fill out this field.',
+                    file: 'Please upload a file.'
+                }
+            };
+            
+            requiredInputs.forEach(input => {
+                if (input.type === 'file') {
+                    if (input.files.length === 0) {
+                        input.setCustomValidity(validationMessages[currentLanguage].file);
+                        isValid = false;
+                    } else {
+                        input.setCustomValidity('');
+                    }
+                } else if (!input.value.trim()) {
+                    input.setCustomValidity(validationMessages[currentLanguage].required);
+                    isValid = false;
+                } else {
+                    input.setCustomValidity('');
+                }
+            });
+            
+            if (!isValid) {
+                // Trigger browser validation UI
+                this.reportValidity();
+                return;
+            }
+
             // Show loading
             document.getElementById('loadingDiv').style.display = 'block';
             document.getElementById('submitBtn').disabled = true;
@@ -864,7 +916,6 @@
             formData.append('timestamp', new Date().toISOString());
 
             // Get all inputs from the active form
-            const activeForm = document.getElementById('form-' + currentLanguage);
             const inputs = activeForm.querySelectorAll('input, select, textarea');
             
             inputs.forEach(input => {
@@ -877,7 +928,6 @@
                 }
             });
 
-            // TODO: Replace with your actual Google Apps Script Web App URL
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwaUqnhsK5TI2otZ3N9ytbsYiKpyo3z77LgU9ZJEdafTDx7q_XG-TsUIhE5aXDqcBBUhg/exec';
 
             fetch(scriptURL, {
