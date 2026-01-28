@@ -998,6 +998,13 @@
             })
             .then(response => response.json())
             .then(data => {
+                console.log('Response:', data);
+                
+                // Check if response indicates error
+                if (data.status === 'error') {
+                    throw new Error(data.message || 'Unknown error');
+                }
+                
                 // Hide loading
                 document.getElementById('loadingDiv').style.display = 'none';
                 document.getElementById('submitBtn').disabled = false;
@@ -1030,9 +1037,9 @@
                 document.getElementById('loadingDiv').style.display = 'none';
                 document.getElementById('submitBtn').disabled = false;
                 
-                const errorMsg = currentLanguage === 'ko' ? '제출 중 오류가 발생했습니다. 다시 시도해 주세요.' :
-                                currentLanguage === 'ja' ? '送信中にエラーが発生しました。もう一度お試しください。' :
-                                'An error occurred during submission. Please try again.';
+                const errorMsg = currentLanguage === 'ko' ? '제출 중 오류가 발생했습니다. 다시 시도해 주세요.\n' + error.toString() :
+                                currentLanguage === 'ja' ? '送信中にエラーが発生しました。もう一度お試しください。\n' + error.toString() :
+                                'An error occurred during submission. Please try again.\n' + error.toString();
                 alert(errorMsg);
             });
         });
