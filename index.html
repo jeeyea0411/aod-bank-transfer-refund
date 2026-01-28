@@ -875,7 +875,7 @@
         });
 
         // Form submission
-        document.getElementById('refundForm').addEventListener('submit', function(e) {
+        document.getElementById('refundForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             if (!currentLanguage) {
@@ -954,29 +954,47 @@
             document.getElementById('loadingDiv').style.display = 'block';
             document.getElementById('submitBtn').disabled = true;
 
-            // Prepare form data
-            const formData = new FormData();
-            formData.append('language', currentLanguage);
-            formData.append('timestamp', new Date().toISOString());
+            // Prepare form data as JSON
+            const formDataObj = {
+                language: currentLanguage,
+                timestamp: new Date().toISOString()
+            };
 
             // Get all inputs from the active form
             const inputs = activeForm.querySelectorAll('input, select, textarea');
             
-            inputs.forEach(input => {
-                if (input.type === 'file') {
-                    if (input.files.length > 0) {
-                        formData.append(input.name, input.files[0]);
+            // Handle file upload - convert to base64
+            let fileData = null;
+            for (const input of inputs) {
+                if (input.type === 'file' && input.files.length > 0) {
+                    const file = input.files[0];
+                    try {
+                        const base64 = await fileToBase64(file);
+                        fileData = {
+                            name: file.name,
+                            type: file.type,
+                            data: base64
+                        };
+                    } catch (error) {
+                        console.error('File conversion error:', error);
                     }
-                } else {
-                    formData.append(input.name, input.value);
+                } else if (input.type !== 'file') {
+                    formDataObj[input.name] = input.value;
                 }
-            });
+            }
+            
+            if (fileData) {
+                formDataObj.fileData = fileData;
+            }
 
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwaUqnhsK5TI2otZ3N9ytbsYiKpyo3z77LgU9ZJEdafTDx7q_XG-TsUIhE5aXDqcBBUhg/exec';
 
             fetch(scriptURL, {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formDataObj)
             })
             .then(response => response.json())
             .then(data => {
@@ -1018,6 +1036,19 @@
                 alert(errorMsg);
             });
         });
+
+        // Helper function to convert file to base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const base64 = reader.result.split(',')[1];
+                    resolve(base64);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
     </script>
 </body>
 </html>
