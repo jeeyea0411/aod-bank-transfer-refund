@@ -726,6 +726,10 @@
             // Remove body lang attribute
             document.body.removeAttribute('lang');
             
+            // Reset header to initial state
+            document.getElementById('header-title').textContent = 'AOD Service Refund Request';
+            document.getElementById('header-subtitle').textContent = 'Please select your language';
+            
             // Show language selection screen
             document.getElementById('languageSelectionScreen').style.display = 'block';
             
