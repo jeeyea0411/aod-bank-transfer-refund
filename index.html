@@ -459,6 +459,12 @@
                     </div>
 
                     <div class="form-group">
+                        <label>주민등록번호 또는 여권번호 <span class="required">*</span></label>
+                        <input type="text" name="id_number_ko" required>
+                        <div class="help-text">주민등록번호 또는 여권번호를 입력해주세요</div>
+                    </div>
+
+                    <div class="form-group">
                         <label>은행명 <span class="required">*</span></label>
                         <input type="text" name="bank_name_ko" required>
                     </div>
@@ -504,6 +510,21 @@
                         </div>
                         <input type="file" id="file_ko" name="document_ko" accept=".pdf,.jpg,.jpeg,.png" required>
                     </div>
+
+                    <div class="form-group">
+                        <label>주민등록증 또는 여권 사본 <span class="required">*</span></label>
+                        <div class="help-text" style="margin-bottom: 0.75rem;">
+                            • 주민등록증 또는 여권의 사본 이미지<br>
+                            • 신원 확인을 위해 필요합니다<br>
+                            • 허용 형식: JPG, PNG (최대 10MB)
+                        </div>
+                        <div class="file-upload-area" onclick="document.getElementById('id_file_ko').click()">
+                            <div class="file-icon">🪪</div>
+                            <p>클릭하여 파일 선택 또는 드래그 앤 드롭</p>
+                            <div class="file-name" id="idFileName_ko" style="display: none;"></div>
+                        </div>
+                        <input type="file" id="id_file_ko" name="id_document_ko" accept=".jpg,.jpeg,.png" required>
+                    </div>
                 </div>
 
                 <!-- Japanese Form -->
@@ -511,6 +532,12 @@
                     <div class="form-group">
                         <label>メインキャラクターニックネーム <span class="required">*</span></label>
                         <input type="text" name="nickname_ja" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>本人確認書類番号 <span class="required">*</span></label>
+                        <input type="text" name="id_number_ja" required>
+                        <div class="help-text">マイナンバーカード、運転免許証、またはパスポート番号を入力してください</div>
                     </div>
 
                     <div class="form-group">
@@ -598,6 +625,21 @@
                         </div>
                         <input type="file" id="file_ja" name="document_ja" accept=".pdf,.jpg,.jpeg,.png" required>
                     </div>
+
+                    <div class="form-group">
+                        <label>本人確認書類のコピー <span class="required">*</span></label>
+                        <div class="help-text" style="margin-bottom: 0.75rem;">
+                            • マイナンバーカード、運転免許証、またはパスポートのコピー画像<br>
+                            • 本人確認のために必要です<br>
+                            • 対応形式：JPG、PNG（最大10MB）
+                        </div>
+                        <div class="file-upload-area" onclick="document.getElementById('id_file_ja').click()">
+                            <div class="file-icon">🪪</div>
+                            <p>クリックしてファイルを選択、またはドラッグ＆ドロップ</p>
+                            <div class="file-name" id="idFileName_ja" style="display: none;"></div>
+                        </div>
+                        <input type="file" id="id_file_ja" name="id_document_ja" accept=".jpg,.jpeg,.png" required>
+                    </div>
                 </div>
 
                 <!-- English Form -->
@@ -610,6 +652,12 @@
                     <div class="form-group">
                         <label>Applicant Name <span class="required">*</span></label>
                         <input type="text" name="name_en" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>ID Number or Passport Number <span class="required">*</span></label>
+                        <input type="text" name="id_number_en" required>
+                        <div class="help-text">Please enter your ID number or passport number</div>
                     </div>
 
                     <div class="form-group">
@@ -663,6 +711,21 @@
                             <div class="file-name" id="fileName_en" style="display: none;"></div>
                         </div>
                         <input type="file" id="file_en" name="document_en" accept=".pdf,.jpg,.jpeg,.png" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>ID or Passport Copy <span class="required">*</span></label>
+                        <div class="help-text" style="margin-bottom: 0.75rem;">
+                            • Copy of your ID or passport<br>
+                            • Required for identity verification<br>
+                            • Accepted formats: JPG, PNG (Max 10MB)
+                        </div>
+                        <div class="file-upload-area" onclick="document.getElementById('id_file_en').click()">
+                            <div class="file-icon">🪪</div>
+                            <p>Click to select file or drag and drop</p>
+                            <div class="file-name" id="idFileName_en" style="display: none;"></div>
+                        </div>
+                        <input type="file" id="id_file_en" name="id_document_en" accept=".jpg,.jpeg,.png" required>
                     </div>
                 </div>
 
@@ -800,6 +863,35 @@
                         }
                         fileName.textContent = file.name;
                         fileName.style.display = 'block';
+                    }
+                });
+            }
+
+            // ID file upload handling
+            const idFileInput = document.getElementById('id_file_' + lang);
+            const idFileName = document.getElementById('idFileName_' + lang);
+            
+            if (idFileInput) {
+                idFileInput.addEventListener('change', function(e) {
+                    // Clear error state
+                    this.classList.remove('input-error');
+                    const errorDiv = this.parentElement.querySelector('.custom-error');
+                    if (errorDiv) {
+                        errorDiv.style.display = 'none';
+                    }
+                    
+                    if (e.target.files.length > 0) {
+                        const file = e.target.files[0];
+                        // Check file size (10MB limit)
+                        if (file.size > 10 * 1024 * 1024) {
+                            alert(currentLanguage === 'ko' ? '파일 크기는 10MB를 초과할 수 없습니다.' :
+                                  currentLanguage === 'ja' ? 'ファイルサイズは10MBを超えることはできません。' :
+                                  'File size cannot exceed 10MB.');
+                            e.target.value = '';
+                            return;
+                        }
+                        idFileName.textContent = file.name;
+                        idFileName.style.display = 'block';
                     }
                 });
             }
@@ -954,18 +1046,27 @@
             // Get all inputs from the active form
             const inputs = activeForm.querySelectorAll('input, select, textarea');
             
-            // Handle file upload - convert to base64
-            let fileData = null;
+            // Handle file uploads - convert to base64
+            let accountFileData = null;
+            let idFileData = null;
+            
             for (const input of inputs) {
                 if (input.type === 'file' && input.files.length > 0) {
                     const file = input.files[0];
                     try {
                         const base64 = await fileToBase64(file);
-                        fileData = {
+                        const fileObj = {
                             name: file.name,
                             type: file.type,
                             data: base64
                         };
+                        
+                        // Determine which file this is based on input name
+                        if (input.name.includes('id_document')) {
+                            idFileData = fileObj;
+                        } else if (input.name.includes('document')) {
+                            accountFileData = fileObj;
+                        }
                     } catch (error) {
                         console.error('File conversion error:', error);
                     }
@@ -974,8 +1075,12 @@
                 }
             }
             
-            if (fileData) {
-                formDataObj.fileData = fileData;
+            // Add file data to form object
+            if (accountFileData) {
+                formDataObj.fileData = accountFileData;
+            }
+            if (idFileData) {
+                formDataObj.idFileData = idFileData;
             }
 
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwaUqnhsK5TI2otZ3N9ytbsYiKpyo3z77LgU9ZJEdafTDx7q_XG-TsUIhE5aXDqcBBUhg/exec';
@@ -995,7 +1100,7 @@
             // Add all data as hidden inputs
             for (const key in formDataObj) {
                 if (key === 'fileData') {
-                    // Add file data as separate fields
+                    // Add account document file data as separate fields
                     const fileInput1 = document.createElement('input');
                     fileInput1.type = 'hidden';
                     fileInput1.name = 'fileName';
@@ -1013,6 +1118,25 @@
                     fileInput3.name = 'fileData';
                     fileInput3.value = formDataObj.fileData.data;
                     tempForm.appendChild(fileInput3);
+                } else if (key === 'idFileData') {
+                    // Add ID document file data as separate fields
+                    const idFileInput1 = document.createElement('input');
+                    idFileInput1.type = 'hidden';
+                    idFileInput1.name = 'idFileName';
+                    idFileInput1.value = formDataObj.idFileData.name;
+                    tempForm.appendChild(idFileInput1);
+                    
+                    const idFileInput2 = document.createElement('input');
+                    idFileInput2.type = 'hidden';
+                    idFileInput2.name = 'idFileType';
+                    idFileInput2.value = formDataObj.idFileData.type;
+                    tempForm.appendChild(idFileInput2);
+                    
+                    const idFileInput3 = document.createElement('input');
+                    idFileInput3.type = 'hidden';
+                    idFileInput3.name = 'idFileData';
+                    idFileInput3.value = formDataObj.idFileData.data;
+                    tempForm.appendChild(idFileInput3);
                 } else {
                     const input = document.createElement('input');
                     input.type = 'hidden';
