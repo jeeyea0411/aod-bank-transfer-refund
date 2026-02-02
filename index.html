@@ -944,14 +944,14 @@
                 e.preventDefault();
                 this.classList.remove('dragover');
                 
-                const lang = this.parentElement.querySelector('input[type="file"]').id.split('_')[1];
-                const fileInput = document.getElementById('file_' + lang);
-                const fileName = document.getElementById('fileName_' + lang);
+                // Find the file input inside this upload area
+                const fileInput = this.parentElement.querySelector('input[type="file"]');
+                const fileNameDisplay = this.querySelector('.file-name');
                 
                 if (e.dataTransfer.files.length > 0) {
                     const file = e.dataTransfer.files[0];
                     
-                    // Check file size (10MB limit)
+                    // Check file size (5MB limit)
                     if (file.size > 5 * 1024 * 1024) {
                         alert(currentLanguage === 'ko' ? '파일 크기는 5MB를 초과할 수 없습니다.' :
                               currentLanguage === 'ja' ? 'ファイルサイズは5MBを超えることはできません。' :
@@ -959,21 +959,30 @@
                         return;
                     }
                     
-                    // Check file type
-                    const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
-                    if (!allowedTypes.includes(file.type)) {
-                        alert(currentLanguage === 'ko' ? 'PDF, JPG, PNG 파일만 업로드 가능합니다.' :
-                              currentLanguage === 'ja' ? 'PDF、JPG、PNGファイルのみアップロード可能です。' :
-                              'Only PDF, JPG, and PNG files are allowed.');
+                    // Check file type based on accept attribute
+                    const acceptAttr = fileInput.getAttribute('accept');
+                    const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+                    
+                    if (acceptAttr && !acceptAttr.includes(fileExt)) {
+                        alert(currentLanguage === 'ko' ? '허용되지 않는 파일 형식입니다.' :
+                              currentLanguage === 'ja' ? '許可されていないファイル形式です。' :
+                              'File type not allowed.');
                         return;
+                    }
+                    
+                    // Clear error state
+                    fileInput.classList.remove('input-error');
+                    const errorDiv = fileInput.parentElement.querySelector('.custom-error');
+                    if (errorDiv) {
+                        errorDiv.style.display = 'none';
                     }
                     
                     const dataTransfer = new DataTransfer();
                     dataTransfer.items.add(file);
                     fileInput.files = dataTransfer.files;
                     
-                    fileName.textContent = file.name;
-                    fileName.style.display = 'block';
+                    fileNameDisplay.textContent = file.name;
+                    fileNameDisplay.style.display = 'block';
                 }
             });
         });
