@@ -6,6 +6,7 @@
     <title>Abyss of Dungeons Refund Request</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📋</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/browser-image-compression/2.0.2/browser-image-compression.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -864,7 +865,7 @@
             const fileName = document.getElementById('fileName_' + lang);
             
             if (fileInput) {
-                fileInput.addEventListener('change', function(e) {
+                fileInput.addEventListener('change', async function(e) {
                     // Clear error state
                     this.classList.remove('input-error');
                     const errorDiv = this.parentElement.querySelector('.custom-error');
@@ -873,17 +874,45 @@
                     }
                     
                     if (e.target.files.length > 0) {
-                        const file = e.target.files[0];
-                        // Check file size (10MB limit)
+                        let file = e.target.files[0];
+                        
+                        // Auto-compress images before size check
+                        if (file.type.startsWith('image/')) {
+                            try {
+                                fileName.textContent = file.name + ' (압축 중...)';
+                                fileName.style.display = 'block';
+                                
+                                const compressed = await imageCompression(file, {
+                                    maxSizeMB: 1.5,
+                                    maxWidthOrHeight: 1920,
+                                    useWebWorker: true
+                                });
+                                
+                                // Replace file with compressed version
+                                const dataTransfer = new DataTransfer();
+                                dataTransfer.items.add(new File([compressed], file.name, { type: compressed.type }));
+                                this.files = dataTransfer.files;
+                                file = compressed;
+                                
+                                fileName.textContent = file.name + ' (압축 완료: ' + (file.size / 1024 / 1024).toFixed(2) + 'MB)';
+                            } catch (error) {
+                                console.error('Compression error:', error);
+                                fileName.textContent = file.name;
+                            }
+                        } else {
+                            fileName.textContent = file.name;
+                            fileName.style.display = 'block';
+                        }
+                        
+                        // Check file size after compression
                         if (file.size > 3 * 1024 * 1024) {
-                            alert(currentLanguage === 'ko' ? '파일 크기는 3MB를 초과할 수 없습니다.' :
-                                  currentLanguage === 'ja' ? 'ファイルサイズは3MBを超えることはできません。' :
-                                  'File size cannot exceed 3MB.');
+                            alert(currentLanguage === 'ko' ? '파일 크기는 3MB를 초과할 수 없습니다. 더 작은 파일을 선택해주세요.' :
+                                  currentLanguage === 'ja' ? 'ファイルサイズは3MBを超えることはできません。より小さいファイルを選択してください。' :
+                                  'File size cannot exceed 3MB. Please select a smaller file.');
                             e.target.value = '';
+                            fileName.style.display = 'none';
                             return;
                         }
-                        fileName.textContent = file.name;
-                        fileName.style.display = 'block';
                     }
                 });
             }
@@ -893,7 +922,7 @@
             const idFileName = document.getElementById('idFileName_' + lang);
             
             if (idFileInput) {
-                idFileInput.addEventListener('change', function(e) {
+                idFileInput.addEventListener('change', async function(e) {
                     // Clear error state
                     this.classList.remove('input-error');
                     const errorDiv = this.parentElement.querySelector('.custom-error');
@@ -902,17 +931,45 @@
                     }
                     
                     if (e.target.files.length > 0) {
-                        const file = e.target.files[0];
-                        // Check file size (10MB limit)
+                        let file = e.target.files[0];
+                        
+                        // Auto-compress images before size check
+                        if (file.type.startsWith('image/')) {
+                            try {
+                                idFileName.textContent = file.name + ' (압축 중...)';
+                                idFileName.style.display = 'block';
+                                
+                                const compressed = await imageCompression(file, {
+                                    maxSizeMB: 1.5,
+                                    maxWidthOrHeight: 1920,
+                                    useWebWorker: true
+                                });
+                                
+                                // Replace file with compressed version
+                                const dataTransfer = new DataTransfer();
+                                dataTransfer.items.add(new File([compressed], file.name, { type: compressed.type }));
+                                this.files = dataTransfer.files;
+                                file = compressed;
+                                
+                                idFileName.textContent = file.name + ' (압축 완료: ' + (file.size / 1024 / 1024).toFixed(2) + 'MB)';
+                            } catch (error) {
+                                console.error('Compression error:', error);
+                                idFileName.textContent = file.name;
+                            }
+                        } else {
+                            idFileName.textContent = file.name;
+                            idFileName.style.display = 'block';
+                        }
+                        
+                        // Check file size after compression
                         if (file.size > 3 * 1024 * 1024) {
-                            alert(currentLanguage === 'ko' ? '파일 크기는 3MB를 초과할 수 없습니다.' :
-                                  currentLanguage === 'ja' ? 'ファイルサイズは3MBを超えることはできません。' :
-                                  'File size cannot exceed 3MB.');
+                            alert(currentLanguage === 'ko' ? '파일 크기는 3MB를 초과할 수 없습니다. 더 작은 파일을 선택해주세요.' :
+                                  currentLanguage === 'ja' ? 'ファイルサイズは3MBを超えることはできません。より小さいファイルを選択してください。' :
+                                  'File size cannot exceed 3MB. Please select a smaller file.');
                             e.target.value = '';
+                            idFileName.style.display = 'none';
                             return;
                         }
-                        idFileName.textContent = file.name;
-                        idFileName.style.display = 'block';
                     }
                 });
             }
