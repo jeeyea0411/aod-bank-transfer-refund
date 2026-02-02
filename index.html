@@ -510,7 +510,7 @@
                             • 은행에서 직접 발행한 날인된 공식 서류<br>
                             • 은행정보, 계좌정보 등이 명확히 기재된 공식 서류<br>
                             • 은행 직인(날인) 필수<br>
-                            • 허용 형식: PDF, JPG, PNG (최대 10MB)
+                            • 허용 형식: PDF, JPG, PNG (최대 5MB)
                         </div>
                         <div class="file-upload-area" onclick="document.getElementById('file_ko').click()">
                             <div class="file-icon">📄</div>
@@ -525,7 +525,7 @@
                         <div class="help-text" style="margin-bottom: 0.75rem;">
                             • 주민등록증의 사본 이미지<br>
                             • 신원 확인을 위해 필요합니다<br>
-                            • 허용 형식: JPG, PNG (최대 10MB)
+                            • 허용 형식: JPG, PNG (최대 5MB)
                         </div>
                         <div class="file-upload-area" onclick="document.getElementById('id_file_ko').click()">
                             <div class="file-icon">🪪</div>
@@ -631,7 +631,7 @@
                         <div class="help-text" style="margin-bottom: 0.75rem;">
                             • 銀行名（例：三菱東京UFJ銀行）、支店名、口座番号、預金者名を含む<br>
                             • 銀行直印が押印されていること<br>
-                            • 対応形式：PDF、JPG、PNG（最大10MB）
+                            • 対応形式：PDF、JPG、PNG（最大5MB）
                         </div>
                         <div class="file-upload-area" onclick="document.getElementById('file_ja').click()">
                             <div class="file-icon">📄</div>
@@ -646,7 +646,7 @@
                         <div class="help-text" style="margin-bottom: 0.75rem;">
                             • マイナンバーカード、運転免許証、またはパスポートのコピー画像<br>
                             • 本人確認のために必要です<br>
-                            • 対応形式：JPG、PNG（最大10MB）
+                            • 対応形式：JPG、PNG（最大5MB）
                         </div>
                         <div class="file-upload-area" onclick="document.getElementById('id_file_ja').click()">
                             <div class="file-icon">🪪</div>
@@ -724,7 +724,7 @@
                             • Official document issued directly by the bank with official stamp<br>
                             • Must clearly show bank information and account details<br>
                             • Bank's official seal/stamp is required<br>
-                            • Accepted formats: PDF, JPG, PNG (Max 10MB)
+                            • Accepted formats: PDF, JPG, PNG (Max 5MB)
                         </div>
                         <div class="file-upload-area" onclick="document.getElementById('file_en').click()">
                             <div class="file-icon">📄</div>
@@ -739,7 +739,7 @@
                         <div class="help-text" style="margin-bottom: 0.75rem;">
                             • Copy of your ID or passport<br>
                             • Required for identity verification<br>
-                            • Accepted formats: JPG, PNG (Max 10MB)
+                            • Accepted formats: JPG, PNG (Max 5MB)
                         </div>
                         <div class="file-upload-area" onclick="document.getElementById('id_file_en').click()">
                             <div class="file-icon">🪪</div>
@@ -875,10 +875,10 @@
                     if (e.target.files.length > 0) {
                         const file = e.target.files[0];
                         // Check file size (10MB limit)
-                        if (file.size > 10 * 1024 * 1024) {
-                            alert(currentLanguage === 'ko' ? '파일 크기는 10MB를 초과할 수 없습니다.' :
-                                  currentLanguage === 'ja' ? 'ファイルサイズは10MBを超えることはできません。' :
-                                  'File size cannot exceed 10MB.');
+                        if (file.size > 5 * 1024 * 1024) {
+                            alert(currentLanguage === 'ko' ? '파일 크기는 5MB를 초과할 수 없습니다.' :
+                                  currentLanguage === 'ja' ? 'ファイルサイズは5MBを超えることはできません。' :
+                                  'File size cannot exceed 5MB.');
                             e.target.value = '';
                             return;
                         }
@@ -904,10 +904,10 @@
                     if (e.target.files.length > 0) {
                         const file = e.target.files[0];
                         // Check file size (10MB limit)
-                        if (file.size > 10 * 1024 * 1024) {
-                            alert(currentLanguage === 'ko' ? '파일 크기는 10MB를 초과할 수 없습니다.' :
-                                  currentLanguage === 'ja' ? 'ファイルサイズは10MBを超えることはできません。' :
-                                  'File size cannot exceed 10MB.');
+                        if (file.size > 5 * 1024 * 1024) {
+                            alert(currentLanguage === 'ko' ? '파일 크기는 5MB를 초과할 수 없습니다.' :
+                                  currentLanguage === 'ja' ? 'ファイルサイズは5MBを超えることはできません。' :
+                                  'File size cannot exceed 5MB.');
                             e.target.value = '';
                             return;
                         }
@@ -952,10 +952,10 @@
                     const file = e.dataTransfer.files[0];
                     
                     // Check file size (10MB limit)
-                    if (file.size > 10 * 1024 * 1024) {
-                        alert(currentLanguage === 'ko' ? '파일 크기는 10MB를 초과할 수 없습니다.' :
-                              currentLanguage === 'ja' ? 'ファイルサイズは10MBを超えることはできません。' :
-                              'File size cannot exceed 10MB.');
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert(currentLanguage === 'ko' ? '파일 크기는 5MB를 초과할 수 없습니다.' :
+                              currentLanguage === 'ja' ? 'ファイルサイズは5MBを超えることはできません。' :
+                              'File size cannot exceed 5MB.');
                         return;
                     }
                     
