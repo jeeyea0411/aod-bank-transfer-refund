@@ -1108,10 +1108,19 @@
             // Add file data to form object
             if (accountFileData) {
                 formDataObj.fileData = accountFileData;
+                console.log('Account file added:', accountFileData.name);
             }
             if (idFileData) {
                 formDataObj.idFileData = idFileData;
+                console.log('ID file added:', idFileData.name);
             }
+
+            console.log('Form data prepared:', {
+                language: formDataObj.language,
+                hasAccountFile: !!accountFileData,
+                hasIdFile: !!idFileData,
+                fields: Object.keys(formDataObj).filter(k => !k.includes('FileData'))
+            });
 
             const scriptURL = 'https://script.google.com/macros/s/AKfycbwaUqnhsK5TI2otZ3N9ytbsYiKpyo3z77LgU9ZJEdafTDx7q_XG-TsUIhE5aXDqcBBUhg/exec';
 
@@ -1178,8 +1187,14 @@
             
             document.body.appendChild(tempForm);
             
+            console.log('Submitting form to:', scriptURL);
+            console.log('Form method:', tempForm.method);
+            console.log('Form inputs count:', tempForm.querySelectorAll('input').length);
+            
             // Submit form
             tempForm.submit();
+            
+            console.log('Form submitted via iframe');
             
             // Wait a bit then show success (since we can't get response with iframe)
             setTimeout(() => {
