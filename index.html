@@ -419,17 +419,20 @@
                 <div class="notice-box">
                     <h3 id="notice-title">Privacy Notice</h3>
                     <div id="notice-content-ko" style="display: none;">
-                        <p>(주)크래프톤(이하 "회사"라 함)은 고객지원 서비스 제공(서비스 종료에 따른 환불 처리(계좌 환불))을 위하여 귀하의 신청자 정보(대표 닉네임, 이름), 계좌 정보(계좌주명, 계좌번호, (해당 시) IBAN), 은행 정보(금융기관(지점) 코드, 은행(지점)명 및 주소, SWIFT CODE) 및 귀하께서 제출한 증빙 서류에 포함된 정보 일체를 수집 및 이용합니다.</p>
+                        <p>(주)크래프톤(이하 "회사"라 함)은 고객지원 서비스 제공(서비스 종료에 따른 환불 처리(계좌 환불))을 위하여 귀하의 신청자 정보(이메일 주소, 대표 닉네임, 이름), 계좌 정보(계좌주명, 계좌번호, (해당 시) IBAN), 은행 정보(금융기관(지점) 코드, 은행(지점)명 및 주소, SWIFT CODE) 및 귀하께서 제출한 증빙 서류에 포함된 정보 일체를 수집 및 이용합니다.</p>
                         <p>(개인정보의 보유 및 이용기간: "문의접수일로부터 3년 (법령에 특별한 규정이 있는 경우 관련 법령에 의함)") (처리 근거: 개인정보보호법 제15조제1항제4호(계약 이행))</p>
+                        <p>※ 회사는 계좌 환불 처리 과정에서 환불 신청자의 신원 확인, 계좌 유효성 검증 및 송금사기 방지를 위하여, 필요 시 신분증 사본(주민등록증 또는 여권) 제출을 요청할 수 있습니다.</p>
                         <p>※ 개인정보 처리에 관한 자세한 내용은 <a href="https://abyssofdungeons.krafton.com/ko/clause/privacy_policy" target="_blank" style="color: #3f3f46; text-decoration: underline;">개인정보 처리방침</a>을 참고하십시오.</p>
                     </div>
                     <div id="notice-content-ja" style="display: none;">
-                        <p>カスタマーサポートサービスの提供（サービス終了に伴う返金申請の処理（銀行振込による返金を含みます））のため、当社は以下の個人情報を取得・利用します。申請者情報（主要なニックネームおよび氏名）、口座情報（口座名義人、口座番号、ならびに該当する場合は IBAN）、銀行情報（金融機関／支店コード、銀行名および所在地、ならびに SWIFT/BIC）、ならびにお客様が直接提供するその他の情報です。</p>
+                        <p>カスタマーサポートサービスの提供（サービス終了に伴う返金申請の処理（銀行振込による返金を含みます））のため、当社は以下の個人情報を取得・利用します。申請者情報（メールアドレス、主要なニックネームおよび氏名）、口座情報（口座名義人、口座番号、ならびに該当する場合は IBAN）、銀行情報（金融機関／支店コード、銀行名および所在地、ならびに SWIFT/BIC）、ならびにお客様が直接提供するその他の情報です。</p>
                         <p>（保有期間：お問い合わせ受付日から3年間。ただし、法令により別途定めがある場合は当該法令に従います。）</p>
+                        <p>※ 銀行振込による返金手続きの過程において、返金申請者の本人確認、口座情報の有効性確認および送金詐欺防止のため、必要に応じて本人確認書類（パスポート等）の写しの提出をお願いする場合があります。</p>
                     </div>
                     <div id="notice-content-en" style="display: none;">
-                        <p>To provide customer support services, including processing End-of-Service Refund Requests, (including bank transfer refunds), we process applicant information (primary nickname and name), account details (account holder, account number, and (if applicable) IBAN), bank information (bank/branch code, bank name and address, and SWIFT/BIC), as well as any other information you directly provide.</p>
+                        <p>To provide customer support services, including processing End-of-Service Refund Requests, (including bank transfer refunds), we process applicant information (email address, primary nickname and name), account details (account holder, account number, and (if applicable) IBAN), bank information (bank/branch code, bank name and address, and SWIFT/BIC), as well as any other information you directly provide.</p>
                         <p>(Retention period: 3 years from the date the inquiry is received, unless otherwise required by applicable laws.)</p>
+                        <p>※ During the bank refund process, we may request a copy of a government-issued identification document (such as a passport) where necessary, for the purpose of verifying the refund applicant's identity, validating account details, and preventing transfer fraud.</p>
                     </div>
                 </div>
 
@@ -456,6 +459,12 @@
                     <div class="form-group">
                         <label>신청자 성함 <span class="required">*</span></label>
                         <input type="text" name="name_ko" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>이메일 주소 <span class="required">*</span></label>
+                        <input type="email" name="email_ko" required>
+                        <div class="help-text">고객센터에 문의하신 이메일과 동일한 이메일을 기입해 주세요.</div>
                     </div>
 
                     <div class="form-group">
@@ -532,6 +541,12 @@
                     <div class="form-group">
                         <label>メインキャラクターニックネーム <span class="required">*</span></label>
                         <input type="text" name="nickname_ja" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>メールアドレス <span class="required">*</span></label>
+                        <input type="email" name="email_ja" required>
+                        <div class="help-text">カスタマーサポートにお問い合わせいただいたメールアドレスと同じメールアドレスを入力してください。</div>
                     </div>
 
                     <div class="form-group">
@@ -652,6 +667,12 @@
                     <div class="form-group">
                         <label>Applicant Name <span class="required">*</span></label>
                         <input type="text" name="name_en" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Address <span class="required">*</span></label>
+                        <input type="email" name="email_en" required>
+                        <div class="help-text">Please enter the same email address you used to contact customer support.</div>
                     </div>
 
                     <div class="form-group">
